@@ -1,0 +1,13 @@
+DESIGN.md
+
+# 含真實的 GOOGLE_CLIENT_SECRET / STATE_SECRET,不可進版控(.env.example 不受影響)
+.env
+
+__pycache__/
+
+# Google ADK 執行時產物(session.db 可能存著對話內容)
+.adk/
+
+# Claude Code 本機設定(任何層級的 .claude/ 目錄,含 adk_agent/.claude/)
+.claude/
+.mcp.json

@@ -1,0 +1,8 @@
+fastmcp>=3.4
+httpx>=0.27
+pydantic-settings>=2.0
+# auth/callback.py、gmail/confirm.py、audit/route.py 直接 import;版本跟著 fastmcp 的相依範圍走
+starlette
+
+# 選用:要用 RedisCacheStore / RedisAuditStore 時才需要
+# redis>=5.0
