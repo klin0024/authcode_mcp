@@ -61,13 +61,44 @@ def register_oauth_callback(mcp: FastMCP, settings: Settings) -> None:
                 style="padding:8px 16px;border-radius:6px;border:1px solid #ccc;
                        background:#fff;cursor:pointer;">複製</button>
         <script>
+        function showCopyResult(text) {{
+          var btn = document.getElementById('copy-btn');
+          btn.textContent = text;
+          setTimeout(function () {{ btn.textContent = '複製'; }}, 1500);
+        }}
+
+        // navigator.clipboard 只在 secure context(HTTPS 或 localhost)存在;
+        // 用 http + 網域名稱開這頁時它是 undefined,改用 execCommand('copy') 當備案。
+        function fallbackCopy(code) {{
+          var textarea = document.createElement('textarea');
+          textarea.value = code;
+          textarea.setAttribute('readonly', '');
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.select();
+          var ok = false;
+          try {{ ok = document.execCommand('copy'); }} catch (e) {{}}
+          document.body.removeChild(textarea);
+          if (ok) {{
+            showCopyResult('已複製');
+          }} else {{
+            // 連備案都失敗:選取授權碼讓使用者自己按 Ctrl+C
+            window.getSelection().selectAllChildren(document.getElementById('auth-code'));
+            showCopyResult('請按 Ctrl+C 複製');
+          }}
+        }}
+
         function copyAuthCode() {{
           var code = {code_js};
-          navigator.clipboard.writeText(code).then(function () {{
-            var btn = document.getElementById('copy-btn');
-            btn.textContent = '已複製';
-            setTimeout(function () {{ btn.textContent = '複製'; }}, 1500);
-          }});
+          if (navigator.clipboard && window.isSecureContext) {{
+            navigator.clipboard.writeText(code).then(
+              function () {{ showCopyResult('已複製'); }},
+              function () {{ fallbackCopy(code); }}
+            );
+          }} else {{
+            fallbackCopy(code);
+          }}
         }}
         </script>
         """
