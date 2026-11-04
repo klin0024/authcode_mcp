@@ -1,0 +1,8 @@
+# 各 agent 的 .env 含 GOOGLE_API_KEY,絕不能進 image;執行時用 --env-file 帶入
+**/.env
+
+# 本機對話紀錄(session.db 可能存著信件內容)
+**/.adk/
+**/__pycache__/
+**/*.pyc
+.claude/

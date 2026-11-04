@@ -1,0 +1,4 @@
+# adk deploy agent_engine 只讀 agent 資料夾自己的 ignore 檔,專案根目錄的 .gitignore 不算;
+# 不排除的話 .env(含 GOOGLE_API_KEY)會被打包上傳到 Agent Engine。
+.env
+__pycache__

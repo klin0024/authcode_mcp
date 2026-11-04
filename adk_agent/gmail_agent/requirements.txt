@@ -1,0 +1,2 @@
+# adk deploy agent_engine 用這份安裝部署環境的相依;MCPToolset 需要 mcp extra
+google-adk[mcp]==2.13.0

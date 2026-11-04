@@ -1,0 +1,163 @@
+{
+  "protocolVersion": "0.3.0",
+  "name": "gmail_skills_agent",
+  "description": "Gmail 助理:讀信、搜尋、摘要、整理收件匣、貼標籤、擬回覆與新信、追蹤未回覆、清理電子報。第一次使用需由使用者本人完成 Google 授權並貼回授權碼;寄信、刪信等會改變信箱的動作,都要使用者在確認連結上親自確認才會執行。",
+  "url": "https://gmail-skills-agent-1094060326590.us-central1.run.app/a2a/gmail_skills_agent",
+  "preferredTransport": "JSONRPC",
+  "version": "1.0.0",
+  "capabilities": {
+    "streaming": false
+  },
+  "defaultInputModes": [
+    "text/plain"
+  ],
+  "defaultOutputModes": [
+    "text/plain"
+  ],
+  "skills": [
+    {
+      "id": "gmail-search",
+      "name": "搜尋與讀信",
+      "description": "把使用者的自然語言需求轉成 Gmail 搜尋語法，並以最少的呼叫次數找到信件、讀出內文。任何需要找信、列信、讀信的任務都先用這個 skill。",
+      "tags": [
+        "gmail",
+        "email",
+        "search"
+      ],
+      "examples": [
+        "找上週老闆寄來的信",
+        "有沒有關於報價的信",
+        "列出最近 3 封未讀信"
+      ]
+    },
+    {
+      "id": "inbox-triage",
+      "name": "整理收件匣",
+      "description": "整理收件匣：把信件分類成需回覆、待辦、僅供參考、電子報、可封存，並貼標籤或封存。使用者說「幫我整理收件匣」「看看有什麼重要的」「清一下信箱」時使用。",
+      "tags": [
+        "gmail",
+        "email",
+        "inbox",
+        "triage"
+      ],
+      "examples": [
+        "幫我整理收件匣",
+        "看看有什麼重要的",
+        "清一下信箱"
+      ]
+    },
+    {
+      "id": "thread-summary",
+      "name": "郵件串摘要",
+      "description": "讀取並摘要一整串郵件往來，整理出結論、未決事項、誰在等誰回覆、截止日。使用者說「這串在講什麼」「幫我摘要跟某某的來回」「我錯過了什麼」時使用。",
+      "tags": [
+        "gmail",
+        "email",
+        "thread",
+        "summary"
+      ],
+      "examples": [
+        "這串在講什麼",
+        "幫我摘要跟某某的來回",
+        "我錯過了什麼"
+      ]
+    },
+    {
+      "id": "reply-drafting",
+      "name": "擬回覆與新信",
+      "description": "讀取原信後擬回覆或新信，依對象調整語氣、維持使用者寫作風格，並以草稿形式交給使用者確認。使用者說「幫我回這封」「擬一封信給某某」「怎麼回比較好」時使用。",
+      "tags": [
+        "gmail",
+        "email",
+        "reply",
+        "drafting"
+      ],
+      "examples": [
+        "幫我回這封",
+        "擬一封信給某某",
+        "怎麼回比較好"
+      ]
+    },
+    {
+      "id": "daily-digest",
+      "name": "每日 / 每週摘要",
+      "description": "產生每日或每週信件摘要：重要未讀、需要回覆、等待對方回覆、近期截止日。使用者說「今天有什麼信」「給我每日摘要」「這週信箱重點」或排程任務觸發時使用。",
+      "tags": [
+        "gmail",
+        "email",
+        "daily",
+        "digest"
+      ],
+      "examples": [
+        "今天有什麼信",
+        "給我每日摘要",
+        "這週信箱重點"
+      ]
+    },
+    {
+      "id": "follow-up-tracker",
+      "name": "追蹤未回覆",
+      "description": "找出使用者寄出後對方遲遲沒回的信，以及別人問了使用者卻還沒回的信，並可擬追蹤信。使用者說「誰還沒回我」「有哪些信我忘了回」「幫我催一下」時使用。",
+      "tags": [
+        "gmail",
+        "email",
+        "follow",
+        "up",
+        "tracker"
+      ],
+      "examples": [
+        "誰還沒回我",
+        "有哪些信我忘了回",
+        "幫我催一下"
+      ]
+    },
+    {
+      "id": "attachment-handling",
+      "name": "附件處理",
+      "description": "找出、下載並讀取信件附件（發票、合約、報表等），並處理安全與大小限制。使用者說「找上個月的發票」「幫我看這封信的附件」「把報表抓下來」時使用。",
+      "tags": [
+        "gmail",
+        "email",
+        "attachment",
+        "handling"
+      ],
+      "examples": [
+        "找上個月的發票",
+        "幫我看這封信的附件",
+        "把報表抓下來"
+      ]
+    },
+    {
+      "id": "label-organization",
+      "name": "標籤管理",
+      "description": "管理 Gmail 標籤：查詢既有標籤、名稱與 ID 對應、依規則批次貼標或移除標籤，避免重複或拼法不一致。使用者說「幫我把這些信貼上某標籤」「整理標籤」「把某某的信都歸到某資料夾」時使用。",
+      "tags": [
+        "gmail",
+        "email",
+        "label",
+        "organization"
+      ],
+      "examples": [
+        "幫我把這些信貼上某標籤",
+        "整理標籤",
+        "把某某的信都歸到某資料夾"
+      ]
+    },
+    {
+      "id": "newsletter-cleanup",
+      "name": "電子報清理",
+      "description": "辨識並批次清理電子報、行銷信、自動通知，統計寄件者來信量，列出建議退訂的對象。使用者說「清一下廣告信」「哪些電子報可以退訂」「信箱太亂」時使用。",
+      "tags": [
+        "gmail",
+        "email",
+        "newsletter",
+        "cleanup"
+      ],
+      "examples": [
+        "清一下廣告信",
+        "哪些電子報可以退訂",
+        "信箱太亂"
+      ]
+    }
+  ]
+}

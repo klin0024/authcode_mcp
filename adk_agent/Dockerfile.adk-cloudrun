@@ -1,0 +1,49 @@
+# adk deploy cloud_run --a2a 為 gmail_skills_agent 產生的 Dockerfile(ADK 2.13.0 範本重現,僅供參考,部署時由 adk 自動產生)
+FROM python:3.11-slim
+WORKDIR /app
+
+# Create a non-root user
+RUN adduser --disabled-password --gecos "" myuser
+
+# Optional Agent Gateway intercept CA (Cloud Build build-arg)
+ARG AGENT_GATEWAY_ROOT_CERTIFICATES
+RUN if [ -n "$AGENT_GATEWAY_ROOT_CERTIFICATES" ]; then \
+      mkdir -p /usr/local/share/ca-certificates && \
+      echo "$AGENT_GATEWAY_ROOT_CERTIFICATES" > /usr/local/share/ca-certificates/agw-ca.crt && \
+      update-ca-certificates; \
+    fi
+ENV REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+ENV SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+ENV GRPC_DEFAULT_SSL_ROOTS_FILE_PATH=/etc/ssl/certs/ca-certificates.crt
+
+# Switch to the non-root user
+USER myuser
+
+# Set up environment variables - Start
+ENV PATH="/home/myuser/.local/bin:$PATH"
+
+# Set up environment variables - End
+
+# Install ADK - Start
+RUN ["pip", "install", "google-adk[a2a]==2.13.0"]
+# Remove dev_server.py to ensure production-safe endpoints only (disabling dev endpoints in production)
+# Shell form on purpose: this instruction interpolates nothing, and `|| true`
+# is shell syntax. Do not add a `{...}` placeholder to it without moving it to
+# exec form first.
+RUN python -c "import os, glob, google.adk.cli as cli; d = os.path.dirname(cli.__file__); [os.remove(f) for f in glob.glob(os.path.join(d, 'dev_server*'))]; [os.remove(f) for f in glob.glob(os.path.join(d, '__pycache__', 'dev_server*'))]" || true
+# Install ADK - End
+
+# Copy agent - Start
+
+# Set permission
+COPY --chown=myuser:myuser "agents/gmail_skills_agent/" "/app/agents/gmail_skills_agent/"
+
+# Copy agent - End
+
+# Install Agent Deps - Start
+RUN ["pip", "install", "-r", "/app/agents/gmail_skills_agent/requirements.txt"]
+# Install Agent Deps - End
+
+EXPOSE 8000
+
+CMD ["adk", "api_server", "--port=8000", "--host=0.0.0.0", "--no_use_local_storage", "--a2a", "/app/agents"]

@@ -1,2 +1,6 @@
-google-adk[mcp]
-google-genai
+# adk_agent/ 底下所有 agent(gmail_agent、gmail_skills_agent)共用的相依,Dockerfile 用這份安裝。
+# 版本跟各 agent 資料夾裡給 adk deploy agent_engine 用的 requirements.txt 一致。
+# mcp:MCPToolset 需要;a2a:adk web/api_server --a2a 開 A2A endpoint 需要(a2a-sdk[http-server])。
+google-adk[mcp,a2a]==2.13.0
+# gmail_skills_agent 用 zoneinfo 代入日期;Windows 與 python:*-slim 映像都沒有系統時區資料庫
+tzdata

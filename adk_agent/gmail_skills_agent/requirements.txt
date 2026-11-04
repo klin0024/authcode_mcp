@@ -1,0 +1,4 @@
+# adk deploy agent_engine 用這份安裝部署環境的相依;MCPToolset 需要 mcp extra
+google-adk[mcp]==2.13.0
+# zoneinfo 在 Windows 沒有內建時區資料庫,agent.py 代入 {{current_date}} 時需要
+tzdata
